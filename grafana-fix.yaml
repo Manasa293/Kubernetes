@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: grafana-permission-fix
+  namespace: monitoring-manual
+spec:
+  containers:
+  - name: fix
+    image: busybox
+    command: ["sh", "-c", "chown -R 472:472 /var/lib/grafana && sleep 5"]
+    volumeMounts:
+    - name: grafana-storage
+      mountPath: /var/lib/grafana
+  volumes:
+  - name: grafana-storage
+    persistentVolumeClaim:
+      claimName: grafana-pvc
+  restartPolicy: Never
