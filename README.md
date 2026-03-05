@@ -71,6 +71,9 @@ Verify Logs Are Being Sent
 You should see something like:
 msg="tailing new journal target"
 
+sudo chown -R 472:472 /mnt/data/grafana
+sudo chmod -R 775 /mnt/data/grafana ->when we create pv and pvc should take care of permissions of volumes and monunt them
+
 Query in Grafana Loki
 Use this below query:
 ~  {job="jenkins"}
