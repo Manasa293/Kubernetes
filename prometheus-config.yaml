@@ -46,21 +46,28 @@ data:
           username: sqa_aff0e3d92478e0296e0be4d0e8f8ebb7d8e28e5b
           password: ""
 
-      - job_name: "kubernetes-cadvisor"
-        kubernetes_sd_configs:
-          - role: node
+      - job_name: "jenkins-ec2"
+        static_configs:
+          - targets: ["3.110.202.3:9100"]
+            labels:
+              instance: jenkins-ec2
+              job: jenkins
 
+      - job_name: "kubernetes-nodes-cadvisor"
         scheme: https
-        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-
         tls_config:
           insecure_skip_verify: true
-
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        kubernetes_sd_configs:
+          - role: node
         relabel_configs:
+          - action: labelmap
+            regex: __meta_kubernetes_node_label_(.+)
           - target_label: __address__
             replacement: kubernetes.default.svc:443
-
           - source_labels: [__meta_kubernetes_node_name]
+            regex: (.+)
             target_label: __metrics_path__
             replacement: /api/v1/nodes/$1/proxy/metrics/cadvisor
+
 

@@ -1,3 +1,9 @@
 - job_name: 'jenkins-ec2'
+
   static_configs:
-    - targets: ['3.110.65.132:9100']
+    - targets:
+        - 3.110.202.3:9100
+      labels:
+        instance: jenkins-ec2
+        job: jenkins
+
